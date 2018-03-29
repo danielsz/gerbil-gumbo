@@ -219,9 +219,8 @@ END-C
             (list (cons '@ (map attribute->sxml attrs)))))
     ,@(filter-map node->sxml (element-children node))))
 
-(define (html->sxml src)
-  (let* ((output (gumbo-parse src))
-         (result (try
-		  (node->sxml (gumbo-document output))
-		  (finally (gumbo-destroy-output! output)))))
-    result))
+(define (html->sxml str)
+  (let ((output (gumbo-parse str)))
+    (try
+     (node->sxml (gumbo-document output))
+     (finally (gumbo-destroy-output! output)))))

@@ -1,0 +1,23 @@
+* gerbil-gumbo
+
+** Definition
+Gumbo is a HTML5 parsing library in pure C99 . This library provides bindings for the Gerbil language. 
+
+** Installation
+#+BEGIN_SRC sh
+./build.ss
+#+END_SRC
+
+** Usage
+
+This module exports a single API call, ~html->sxml~ which accepts a string and returns a sxml tree.
+
+#+BEGIN_SRC scheme
+(import :danielsz/gumbo :std/net/request)
+(def req (http-get "https://www.google.com"))
+(html->sxml (request-text req)
+#+END_SRC
+
+** Credit
+
+Many thanks to @vyzo for the invaluable guidance, and to @caolan for showing the way with [[https://github.com/caolan/chicken-gumbo][chicken-gumbo.]]

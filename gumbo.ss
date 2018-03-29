@@ -1,4 +1,9 @@
+;;; -*- Scheme -*-
+;;; (C) Daniel Szmulewicz
+;;; gumbo ffi
+
 ;; compile: -ld-options "-lgumbo"
+
 (import :std/srfi/1 :std/sugar)
 (export html->sxml)
 (extern
@@ -34,40 +39,8 @@
   GUMBO_NODE_TEMPLATE
   GUMBO_TAG_UNKNOWN)
 (begin-foreign
-  (namespace ("danielsz/gumbo#"
-	      gumbo-vector->list
-	      node->sxml
-	      gumbo-parse
-	      gumbo-destroy-output!
-	      gumbo-default-options
-	      gumbo-root
-	      gumbo-document
-	      gumbo-node
-	      gumbo-node-type
-	      gumbo-document-children
-	      gumbo-vector-length
-	      gumbo-vector-ref
-	      gumbo-vector-capacity
-	      gumbo-element-children
-	      gumbo-element-attributes
-	      gumbo-element-tag
-	      gumbo-element-original-tag-string-piece
-	      gumbo-attribute-name
-	      gumbo-attribute-value
-	      gumbo-get-attribute
-	      gumbo-attribute
-	      gumbo-node-text
-	      gumbo-text
-	      gumbo-normalized-tagname
-	      gumbo-tag-from-original-text
-	      GUMBO_NODE_DOCUMENT
-	      GUMBO_NODE_ELEMENT
-	      GUMBO_NODE_TEXT
-	      GUMBO_NODE_CDATA
-	      GUMBO_NODE_COMMENT
-	      GUMBO_NODE_WHITESPACE
-	      GUMBO_NODE_TEMPLATE
-	      GUMBO_TAG_UNKNOWN))
+  (namespace ("danielsz/gumbo#"))
+  (##namespace ("" define define-macro c-declare c-define-type c-lambda))
   
   (c-declare "#include <gumbo.h>")
   (c-declare
@@ -160,7 +133,8 @@ END-C
   (define-c-lambda gumbo-string-piece-data (GumboStringPiece*) (pointer void)
     "___return (((GumboStringPiece*)(___arg1))->data);")
   (define-c-lambda gumbo-normalized-tagname (int) char-string
-    "gumbo_normalized_tagname"))
+    "gumbo_normalized_tagname")
+  (##namespace ("")))
 
 (define (gumbo-vector->list v)
   (let ((xs (list-tabulate (gumbo-vector-length v)

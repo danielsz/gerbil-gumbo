@@ -23,7 +23,6 @@
   gumbo-element-original-tag-string-piece
   gumbo-attribute-name
   gumbo-attribute-value
-  gumbo-get-attribute
   gumbo-attribute
   gumbo-node-text
   gumbo-text
@@ -116,11 +115,9 @@ END-C
     "gumbo_tag_from_original_text")
   (define-c-lambda gumbo-attribute (GumboNode*) GumboAttribute*
     "___return ((GumboAttribute*)(___arg1));")
-  (define-c-lambda gumbo-get-attribute (GumboVector* char-string) GumboAttribute*
-    "gumbo_get_attribute")
-  (define-c-lambda gumbo-attribute-name (GumboAttribute*) char-string
+  (define-c-lambda gumbo-attribute-name (GumboAttribute*) UTF-8-string
     "___return (((GumboAttribute*)(___arg1))->name);")
-  (define-c-lambda gumbo-attribute-value (GumboAttribute*) char-string
+  (define-c-lambda gumbo-attribute-value (GumboAttribute*) UTF-8-string
     "___return (((GumboAttribute*)(___arg1))->value);")
   (define-c-lambda gumbo-vector-length (GumboVector*) unsigned-int
     "___return (((GumboVector*)(___arg1))->length);")

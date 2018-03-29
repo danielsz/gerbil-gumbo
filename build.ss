@@ -1,4 +1,4 @@
-#!/usr/bin/env gxi
+#!/usr/bin/env gxc
 
 (import :std/make :std/build-script)
 

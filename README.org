@@ -7,11 +7,6 @@ Gumbo is a HTML5 parsing library in pure C99. This library provides bindings for
 #+BEGIN_SRC sh
 gxpkg install github.com/danielsz/gerbil-gumbo
 #+END_SRC
-Or:
-#+BEGIN_SRC sh
-./build.ss
-#+END_SRC
-
 ** Usage
 
 This module exports a single API call, ~html->sxml~ which accepts a string and returns a sxml tree.

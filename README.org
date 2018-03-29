@@ -19,4 +19,4 @@ This module exports a single API call, ~html->sxml~ which accepts a string and r
 
 ** Credit
 
-Many thanks to @vyzo for the invaluable guidance, and to @caolan for showing the way with [[https://github.com/caolan/chicken-gumbo][chicken-gumbo.]]
+Many thanks to [[https://github.com/vyzo][@vyzo]] for the invaluable guidance, and to [[https://github.com/caolan][@caolan]] for showing the way with [[https://github.com/caolan/chicken-gumbo][chicken-gumbo.]]

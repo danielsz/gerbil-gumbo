@@ -2,9 +2,6 @@
 (import :std/srfi/1 :std/sugar)
 (export html->sxml)
 (extern
-  html->sxml
-  gumbo-vector->list
-  node->sxml
   gumbo-parse
   gumbo-destroy-output!
   gumbo-default-options

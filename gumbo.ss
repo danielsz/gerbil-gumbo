@@ -1,4 +1,4 @@
-;;; -*- Scheme -*-
+;;; -*- Gerbil -*-
 ;;; (C) Daniel Szmulewicz
 ;;; gumbo ffi
 
@@ -6,6 +6,7 @@
 
 (import :std/srfi/1 :std/sugar)
 (export html->sxml)
+
 (extern
   gumbo-parse
   gumbo-destroy-output!
@@ -37,20 +38,13 @@
   GUMBO_NODE_WHITESPACE
   GUMBO_NODE_TEMPLATE
   GUMBO_TAG_UNKNOWN)
+
 (begin-foreign
   (namespace ("danielsz/gumbo#"))
   (##namespace ("" define define-macro c-declare c-define-type c-lambda))
-  
+
   (c-declare "#include <gumbo.h>")
-  (c-declare
-#<<END-C
-#ifndef ___HAVE_FFI_U8VECTOR
-#define ___HAVE_FFI_U8VECTOR
-#define U8_DATA(obj) ___CAST (___U8*, ___BODY_AS (obj, ___tSUBTYPED))
-#define U8_LEN(obj) ___HD_BYTES (___HEADER (obj))
-#endif
-END-C
-    )
+
   (define-macro (define-const symbol)
     (let* ((str (symbol->string symbol))
 	   (ref (string-append "___return (" str ");")))
@@ -71,21 +65,21 @@ END-C
   (define-const GUMBO_TAG_UNKNOWN)
 
   (c-define-type GumboOptions*
-		 (pointer (struct "GumboInternalOptions") (*GumboOptions)))
+    (pointer "GumboOptions" (*GumboOptions)))
   (c-define-type GumboOutput*
-		 (pointer (struct "GumboInternalOutput") (*GumboOutput)))
+    (pointer "GumboOutput" (*GumboOutput)))
   (c-define-type GumboVector*
-		 (pointer (struct "GumboVector") (*GumboVector)))
+    (pointer "GumboVector" (*GumboVector)))
   (c-define-type GumboNode*
-		 (pointer (struct "GumboInternalNode") (*GumboNode)))
+    (pointer "GumboNode" (*GumboNode)))
   (c-define-type GumboAttribute*
-		 (pointer (struct "GumboAttribute") (*GumboAttribute)))
+    (pointer "GumboAttribute" (*GumboAttribute)))
   (c-define-type GumboStringPiece*
-		 (pointer (struct "GumboStringPiece") (*GumboStringPiece)))
+    (pointer "GumboStringPiece" (*GumboStringPiece)))
   (c-define-type GumboText*
-		 (pointer (struct "GumboText") (*GumboText)))
+    (pointer "GumboText" (*GumboText)))
   (c-define-type GumboElement*
-		 (pointer (struct "GumboElement") (*GumboElement)))
+    (pointer "GumboElement" (*GumboElement)))
 
   (define-c-lambda gumbo-parse (UTF-8-string) GumboOutput*
     "gumbo_parse")
@@ -98,39 +92,39 @@ END-C
   (define-c-lambda gumbo-node ((pointer void)) GumboNode*
     "___return ((GumboNode*)(___arg1));")
   (define-c-lambda gumbo-node-text (GumboNode*) UTF-8-string
-    "___return (((GumboNode*)(___arg1))->v.text.text);")
+    "___return ((char*)___arg1->v.text.text);")
   (define-c-lambda gumbo-node-type (GumboNode*) int
-    "___return (((GumboNode*)___arg1)->type);")
+    "___return (___arg1->type);")
   (define-c-lambda gumbo-document-children (GumboNode*) GumboVector*
-    "___return (&((GumboNode*)(___arg1))->v.document.children);")
+    "___return (&___arg1->v.document.children);")
   (define-c-lambda gumbo-element-children (GumboNode*) GumboVector*
-    "___return (&((GumboNode*)(___arg1))->v.element.children);")
+    "___return (&___arg1->v.element.children);")
   (define-c-lambda gumbo-element-attributes (GumboNode*) GumboVector*
-    "___return (&((GumboNode*)(___arg1))->v.element.attributes);")
+    "___return (&___arg1->v.element.attributes);")
   (define-c-lambda gumbo-element-tag (GumboNode*) int
-    "___return (((GumboNode*)(___arg1))->v.element.tag);")
+    "___return (___arg1->v.element.tag);")
   (define-c-lambda gumbo-element-original-tag-string-piece (GumboNode*) GumboStringPiece*
-    "___return (&((GumboNode*)(___arg1))->v.element.original_tag);")
+    "___return (&___arg1->v.element.original_tag);")
   (define-c-lambda gumbo-tag-from-original-text (GumboStringPiece*) void
     "gumbo_tag_from_original_text")
   (define-c-lambda gumbo-attribute (GumboNode*) GumboAttribute*
     "___return ((GumboAttribute*)(___arg1));")
   (define-c-lambda gumbo-attribute-name (GumboAttribute*) UTF-8-string
-    "___return (((GumboAttribute*)(___arg1))->name);")
+    "___return ((char*)___arg1->name);")
   (define-c-lambda gumbo-attribute-value (GumboAttribute*) UTF-8-string
-    "___return (((GumboAttribute*)(___arg1))->value);")
+    "___return ((char*)___arg1->value);")
   (define-c-lambda gumbo-vector-length (GumboVector*) unsigned-int
-    "___return (((GumboVector*)(___arg1))->length);")
+    "___return (___arg1->length);")
   (define-c-lambda gumbo-vector-ref (GumboVector* unsigned-int) (pointer void)
-    "___return (((GumboVector*)(___arg1))->data[___arg2]);")
+    "___return (___arg1->data[___arg2]);")
   (define-c-lambda gumbo-vector-capacity (GumboVector*) unsigned-int
-    "___return (((GumboVector*)(___arg1))->capacity);")
+    "___return (___arg1->capacity);")
   (define-c-lambda gumbo-string-piece-length (GumboStringPiece*) size_t
-    "___return (((GumboStringPiece*)(___arg1))->length);")
+    "___return (___arg1->length);")
   (define-c-lambda gumbo-string-piece-data (GumboStringPiece*) (pointer void)
-    "___return (((GumboStringPiece*)(___arg1))->data);")
+    "___return ((void*)___arg1->data);")
   (define-c-lambda gumbo-normalized-tagname (int) char-string
-    "gumbo_normalized_tagname")
+    "___return ((char*)gumbo_normalized_tagname(___arg1));")
   (##namespace ("")))
 
 (define (gumbo-vector->list v)

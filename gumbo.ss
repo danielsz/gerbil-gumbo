@@ -26,8 +26,6 @@
   gumbo-attribute-value
   gumbo-attribute
   gumbo-node-text
-  gumbo-text
-  gumbo-node
   gumbo-normalized-tagname
   gumbo-tag-from-original-text
   GUMBO_NODE_DOCUMENT
@@ -89,8 +87,6 @@
     "___return (___arg1->root);")
   (define-c-lambda gumbo-document (GumboOutput*) GumboNode*
     "___return (___arg1->document);")
-  (define-c-lambda gumbo-node ((pointer void)) GumboNode*
-    "___return ((GumboNode*)(___arg1));")
   (define-c-lambda gumbo-node-text (GumboNode*) UTF-8-string
     "___return ((char*)___arg1->v.text.text);")
   (define-c-lambda gumbo-node-type (GumboNode*) int
@@ -115,8 +111,8 @@
     "___return ((char*)___arg1->value);")
   (define-c-lambda gumbo-vector-length (GumboVector*) unsigned-int
     "___return (___arg1->length);")
-  (define-c-lambda gumbo-vector-ref (GumboVector* unsigned-int) (pointer void)
-    "___return (___arg1->data[___arg2]);")
+  (define-c-lambda gumbo-vector-ref (GumboVector* unsigned-int) GumboNode*
+    "___return ((GumboNode*)___arg1->data[___arg2]);")
   (define-c-lambda gumbo-vector-capacity (GumboVector*) unsigned-int
     "___return (___arg1->capacity);")
   (define-c-lambda gumbo-string-piece-length (GumboStringPiece*) size_t
@@ -128,9 +124,8 @@
   (##namespace ("")))
 
 (define (gumbo-vector->list v)
-  (let ((xs (list-tabulate (gumbo-vector-length v)
-			   (cut gumbo-vector-ref v <>))))
-    (map gumbo-node xs)))
+  (list-tabulate (gumbo-vector-length v)
+		 (cut gumbo-vector-ref v <>)))
 
 (define (element-children node)
   (gumbo-vector->list (gumbo-element-children node)))

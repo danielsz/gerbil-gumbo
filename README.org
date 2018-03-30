@@ -7,6 +7,7 @@
 #+BEGIN_SRC sh
 $ gxpkg install github.com/danielsz/gerbil-gumbo
 #+END_SRC
+Prerequisites: You need to have gumbo installed, including the header files. (eg. ~apt-get install gumbo-parser~). 
 ** Usage
 
 This module exports a single API call, ~html->sxml~ which accepts a string and returns a sxml tree.

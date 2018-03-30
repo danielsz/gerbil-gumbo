@@ -103,12 +103,10 @@
     "___return (&___arg1->v.element.original_tag);")
   (define-c-lambda gumbo-tag-from-original-text (GumboStringPiece*) void
     "gumbo_tag_from_original_text")
-  (define-c-lambda gumbo-attribute (GumboNode*) GumboAttribute*
-    "___return ((GumboAttribute*)(___arg1));")
-  (define-c-lambda gumbo-attribute-name (GumboAttribute*) UTF-8-string
-    "___return ((char*)___arg1->name);")
-  (define-c-lambda gumbo-attribute-value (GumboAttribute*) UTF-8-string
-    "___return ((char*)___arg1->value);")
+  (define-c-lambda gumbo-attribute-name (GumboNode*) UTF-8-string
+    "___return ((char*)(((GumboAttribute*)___arg1)->name));")
+  (define-c-lambda gumbo-attribute-value (GumboNode*) UTF-8-string
+    "___return ((char*)(((GumboAttribute*)___arg1)->value));")
   (define-c-lambda gumbo-vector-length (GumboVector*) unsigned-int
     "___return (___arg1->length);")
   (define-c-lambda gumbo-vector-ref (GumboVector* unsigned-int) GumboNode*
@@ -158,9 +156,8 @@
   `(*CDATA* ,(gumbo-node-text node)))
 
 (define (attribute->sxml a)
-  (let ((a (gumbo-attribute a)))
-    (list (string->symbol (gumbo-attribute-name a))
-	  (gumbo-attribute-value a))))
+  (list (string->symbol (gumbo-attribute-name a))
+	(gumbo-attribute-value a)))
 
 (define (tag-name node)
   (let ((tag (gumbo-element-tag node)))

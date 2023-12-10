@@ -15,7 +15,7 @@ This module exports a single API call, ~html->sxml~ which accepts a string and r
 #+BEGIN_SRC scheme
 (import :danielsz/gumbo :std/net/request)
 (def req (http-get "https://www.google.com"))
-(html->sxml (request-text req)
+(html->sxml (request-text req))
 #+END_SRC
 
 ** Credit
